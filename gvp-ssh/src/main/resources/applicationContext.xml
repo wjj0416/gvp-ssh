@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- 配置Annotation支持操作 -->
+	<context:component-scan base-package="wg.gvp" />
+	<aop:aspectj-autoproxy />
+	<!-- 在本程序中设置要导入的资源文件路径,直接通过CLASSPATH加载 -->
+	<context:property-placeholder
+		location="classpath:database.properties" />
+	<!-- 配置c3p0数据库连接池 -->
+	<bean id="dataSource"
+		class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${db.driver}" /><!-- 驱动程序 -->
+		<property name="jdbcUrl" value="${db.url}" /><!-- 连接地址 -->
+		<property name="user" value="${db.user}" /><!-- 用户名 -->
+		<property name="password" value="${db.password}" /><!-- 密码 -->
+		<property name="maxPoolSize" value="${pool.max}" /><!-- 最大连接数 -->
+		<property name="minPoolSize" value="${pool.min}" /><!-- 最小连接数 -->
+		<property name="initialPoolSize" value="${pool.init}" /><!-- 初始化连接数 -->
+		<property name="maxIdleTime" value="${pool.idle}" /><!-- 最大等待时间 -->
+	</bean>
+	<!-- 配置Hibernate的相关开发环境 ,SessionFactory可以打开Session -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation"
+			value="classpath:hibernate.cfg.xml">
+		</property>
+	</bean>
+	
+	<!-- 配置事务处理,所有的事务处理都使用aop的方式,本次只是声明SessionFactory要进行事务控制 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 进入到事务的配置声明 -->
+	<!-- 所有的事务都在业务层,所以所有的事务控制都以业务层为主 -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+		
+	<tx:advice id="txAdvice"
+		transaction-manager="transactionManager">
+		<!-- 定义一切与服务层有关的控制方法,只要使用了特定的方法名称就会自动处理事务 -->
+		<tx:attributes>
+			<!-- 表示对所有的业务层的insert开头的方法进行事务处理,只要使用insert的就自动打开事务 -->
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="edit*" propagation="REQUIRED" />
+			<tx:method name="change*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="login*" propagation="REQUIRED" />
+			<!-- read-only="true" 表示只读操作 -->
+			<tx:method name="get*" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="load*" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="list*" propagation="REQUIRED"
+				read-only="true" />
+			<tx:method name="*" propagation="REQUIRED"
+				read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- AOP定义切入点 事务处理切入点-->
+		 <aop:config expose-proxy="true">
+			<aop:pointcut expression="execution(* wg.gvp..service.*.*(..))" id="pointcut"/>
+			<aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+		</aop:config> 
+		
+		
+		<!-- <bean id="news" class="wg.gvp.pojo.News"></bean> -->
+		
+	
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
