@@ -6,4 +6,8 @@ public class Admin{
 	public void init(){
 		System.out.println("say hello ") ;
 	}
+	
+	public void println(){
+		System.out.println("Hello world  ") ;
+	}
 }
