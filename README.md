@@ -1,2 +1,2 @@
 # gvp-ssh
-Spring+
+Spring+Struts+Hibernate
