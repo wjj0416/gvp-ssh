@@ -1,6 +1,6 @@
 DROP TABLE news ;
-CREATE TABLE news(
-	newsid int ,
-	newsname varchar ,
-	prive double
-) ;
+CREATE TABLE news (
+	nid INT ,
+	title VARCHAR ,
+	) ;
+
