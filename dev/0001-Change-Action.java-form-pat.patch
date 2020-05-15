@@ -1,0 +1,56 @@
+From 551955d5b084b0e14b5522d127fcf179f287ef7a Mon Sep 17 00:00:00 2001
+From: gvp <974442421@qq.com>
+Date: Fri, 15 May 2020 15:31:51 +0800
+Subject: [PATCH] Change Action.java form pat
+
+---
+ dev/Action.java |  3 +++
+ dev/Admin.java  |  1 +
+ dev/patch       | 11 +++++++++++
+ 3 files changed, 15 insertions(+)
+ create mode 100644 dev/patch
+
+diff --git a/dev/Action.java b/dev/Action.java
+index a359e57..391ee15 100644
+--- a/dev/Action.java
++++ b/dev/Action.java
+@@ -5,4 +5,7 @@ public class Admin{
+ 	}
+ 
+ 	private Integer aid ;
++	public static void print(){
++		System.out.println("特殊格式补丁") ;
++	}
+ }
+\ No newline at end of file
+diff --git a/dev/Admin.java b/dev/Admin.java
+index 00e0b5f..e2a9738 100644
+--- a/dev/Admin.java
++++ b/dev/Admin.java
+@@ -2,4 +2,5 @@ import java.util.List ;
+ public class Admin{
+ 	System.out.println("Create a patch") ;
+ 	System.out.println("创建一个补丁") ;
++	System.out.println("dev分支创建一个补丁") ;
+ }
+\ No newline at end of file
+diff --git a/dev/patch b/dev/patch
+new file mode 100644
+index 0000000..4ec0f4f
+--- /dev/null
++++ b/dev/patch
+@@ -0,0 +1,11 @@
++diff --git a/dev/Admin.java b/dev/Admin.java
++index 00e0b5f..e2a9738 100644
++--- a/dev/Admin.java
+++++ b/dev/Admin.java
++@@ -2,4 +2,5 @@ import java.util.List ;
++ public class Admin{
++ 	System.out.println("Create a patch") ;
++ 	System.out.println("创建一个补丁") ;
+++	System.out.println("dev分支创建一个补丁") ;
++ }
++\ No newline at end of file
+-- 
+2.26.2.windows.1
+
