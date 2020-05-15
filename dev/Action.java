@@ -5,4 +5,7 @@ public class Admin{
 	}
 
 	private Integer aid ;
+	public static void print(){
+		System.out.println("特殊格式补丁") ;
+	}
 }
